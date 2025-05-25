@@ -1,0 +1,26 @@
+clc; clear; close all;
+
+% Load audio signal
+[y, fs] = wavread('audio1.wav');
+
+% Define new sampling rate
+fs_new = 16000; % for example, resample to 16 kHz
+
+% Calculate upsample and downsample factors
+% Find rational approximation of fs_new / fs
+[p, q] = rat(fs_new / fs, 1e-6);
+
+% Resample the signal
+y_resampled = resample(y, p, q);
+
+% Play original and resampled audio
+disp('Playing original audio...');
+sound(y, fs);
+pause(length(y)/fs + 1);
+
+disp('Playing resampled audio...');
+sound(y_resampled, fs_new);
+
+% Save resampled audio
+wavwrite(y_resampled, fs_new, 'resampled_output.wav');
+disp('Resampled audio saved as resampled_output.wav');
